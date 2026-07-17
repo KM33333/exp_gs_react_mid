@@ -2,7 +2,7 @@ import { useState } from "react";
 import ContentCard from "./components/ContentCard";
 
 function App() {
-  const [name, setName] = useState("");
+  const [name, setName] = useState("美術館");
   const [feature, setFeature] = useState("");
   const [tone, setTone] = useState("やさしい");
   const [result, setResult] = useState("");
@@ -14,10 +14,26 @@ function App() {
     setResult("");
 
     // 入力から「お願い文」を組み立てる
-    const prompt = `あなたはECサイトのコピーライターです。
-次の商品の説明文を、${tone}トーンで、100文字程度で書いてください。
-商品名:${name}
-特徴:${feature}`;
+//     const prompt = `あなたは美術館・博物館・建築が好きな人です。
+// オススメの施設を、${tone}のエリアで教えてください。200文字程度でお願いします。
+// 施設のタイプ:${name}
+// 展示物:${feature}`;
+
+
+    let prompt = "";
+    if (name === "美術館") {
+      prompt = `あなたは美術館が好きです。オススメの施設名と特徴を、${tone}のエリアで教えてください。200文字程度でお願いします。
+      施設のタイプ:${name}
+    展示物:${feature}`;
+    } else if (name === "博物館") {
+      prompt = `あなたは博物館が好きです。オススメの施設名と特徴を、${tone}のエリアで教えてください。200文字程度でお願いします。
+      施設のタイプ:${name}
+    展示物:${feature}`;
+    } else if (name === "建築") {
+      prompt = `あなたは建築が好きです。オススメの施設名と特徴を、${tone}のエリアで教えてください。200文字程度でお願いします。
+      施設のタイプ:${name}
+      展示物:${feature}`;
+    }
 
     const key = import.meta.env.VITE_GROQ_API_KEY;
     console.log("KEYある?", !!key, "／ gsk_で始まる?", key?.startsWith("gsk_"));
@@ -61,25 +77,33 @@ function App() {
 
   return (
     <div style={{ padding: 24, maxWidth: 480 }}>
-      <h1>医薬関連製品説明</h1>
+      <h2>美術館・博物館案内</h2>
 
-      <label>商品名</label>
-      <input value={name} onChange={(e) => setName(e.target.value)} />
-
-      <label>部位（カンマ区切りでOK）</label>
-      <input value={feature} onChange={(e) => setFeature(e.target.value)} />
-
-      <label>トーン</label>
-      <select value={tone} onChange={(e) => setTone(e.target.value)}>
-        <option value="医薬品">医薬品</option>
-        <option value="医薬部外品">医薬部外品</option>
-        <option value="健康食品">健康食品</option>
-        <option value="健康食品">その他</option>
+      <label>施設のタイプ</label>
+      <select value={name} onChange={(e) => setName(e.target.value)}>
+        <option value="美術館">美術館</option>
+        <option value="博物館">博物館</option>
+        <option value="建築">建築</option>
       </select>
+      <div></div>
+      {/* <label>商品名</label>
+      <input value={name} onChange={(e) => setName(e.target.value)} /> */}
+      <label>展示物</label>
+      <input value={feature} onChange={(e) => setFeature(e.target.value)} />
+      <div></div>
 
+      <label>開催地</label>
+      <select value={tone} onChange={(e) => setTone(e.target.value)}>
+        <option value="関東近郊">関東近郊</option>
+        <option value="関西近郊">関西近郊</option>
+        <option value="四国">四国</option>
+        <option value="その他">その他</option>
+      </select>
+      <div></div>
       <button onClick={handleGenerate} disabled={loading}>
         {loading ? "生成中…" : "生成する"}
       </button>
+      
 
       {/* <p style={{ whiteSpace: "pre-wrap", marginTop: 16 }}>{result}</p> */}
       {/* / ...（App の中、return の中）.../ */}
@@ -101,7 +125,5 @@ function App() {
     
   );
 }
-
-
 
 export default App;
