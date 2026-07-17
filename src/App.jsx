@@ -61,7 +61,7 @@ function App() {
 
   return (
     <div style={{ padding: 24, maxWidth: 480 }}>
-      <h1>医薬品説明</h1>
+      <h1>医薬関連製品説明</h1>
 
       <label>商品名</label>
       <input value={name} onChange={(e) => setName(e.target.value)} />
@@ -74,6 +74,7 @@ function App() {
         <option value="医薬品">医薬品</option>
         <option value="医薬部外品">医薬部外品</option>
         <option value="健康食品">健康食品</option>
+        <option value="健康食品">その他</option>
       </select>
 
       <button onClick={handleGenerate} disabled={loading}>
