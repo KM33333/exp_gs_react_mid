@@ -12,6 +12,7 @@
   margin-bottom: 8px;
 }
 .name { margin: 0; font-size: 16px; }
+
 .status {
   font-size: 12px;
   padding: 2px 8px;
@@ -19,4 +20,21 @@
   background: #eef2ff;
   color: #4f46e5;
 }
+
+.card[data-status="下書き"] {
+  background: #FFF4F6;
+  border-color: #4f46e5;
+}
+
+.card[data-status="完成"] {
+  background: #FFFFE0;
+  border-color: #4f46e5;
+}
+
+.card[data-status="公開"] {
+  background: #eeffff;
+  border-color: #4f46e5;
+}
+
+
 .body { margin: 0; white-space: pre-wrap; color: #374151; }
