@@ -37,7 +37,7 @@ function GeneratePage({ onAdd }) {
             model: "llama-3.3-70b-versatile",
             messages: [{ role: "user", content: prompt }],
           }),
-        }
+        },
       );
 
       // 200番台“以外”は失敗として扱う
@@ -58,7 +58,9 @@ function GeneratePage({ onAdd }) {
       onAdd(newItem);
     } catch (e) {
       console.error(e); // 開発者向け：詳しい内容はコンソールへ
-      setError("生成に失敗しました。少し時間をおいて、もう一度お試しください。");
+      setError(
+        "生成に失敗しました。少し時間をおいて、もう一度お試しください。",
+      );
     } finally {
       setLoading(false); // 成功でも失敗でも、必ずローディング解除
     }
@@ -97,9 +99,7 @@ function GeneratePage({ onAdd }) {
         {loading ? "生成中…" : "生成する"}
       </button>
 
-      {error && (
-        <p style={{ color: "#dc2626", marginTop: 12 }}>⚠️ {error}</p>
-      )}
+      {error && <p style={{ color: "#dc2626", marginTop: 12 }}>⚠️ {error}</p>}
 
       <p style={{ color: "#6b7280", marginTop: 12 }}>
         生成すると「ダッシュボード」に追加されます。
