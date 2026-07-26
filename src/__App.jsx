@@ -1,0 +1,46 @@
+import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import NavBar from "./components/_NavBar";
+import DashboardPage from "./pages/_DashboardPage";
+import GeneratePage from "./pages/_GeneratePage";
+import EditPage from "./pages/_EditPage";
+
+function App() {
+  // ① 起動時：localStorage から読み込む（無ければ空配列）
+  const [contents, setContents] = useState(() => {
+    const saved = localStorage.getItem("contents");
+    //if 文を短縮（saved の中にデータがあったら、JSON.parse(saved) を使ってね。なければ、[]（空）で返してね）
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // ② contents が変わるたび：localStorage に保存する
+  useEffect(() => {
+    localStorage.setItem("contents", JSON.stringify(contents));
+  }, [contents]);
+
+  function addContent(newItem) {
+    setContents([newItem, ...contents]);
+  }
+
+  function updateContent(id, changes) {
+    setContents(contents.map((c) => (c.id === id ? { ...c, ...changes } : c)));
+  }
+
+  return (
+    <div style={{ maxWidth: 640, margin: "0 auto", padding: 24 }}>
+      <h1>美術館・博物館の AI 提案</h1>
+      <NavBar />
+
+      <Routes>
+        <Route path="/" element={<DashboardPage contents={contents} />} />
+        <Route path="/generate" element={<GeneratePage onAdd={addContent} />} />
+        <Route
+          path="/edit/:id"
+          element={<EditPage contents={contents} onUpdate={updateContent} />}
+        />
+      </Routes>
+    </div>
+  );
+}
+
+export default App;

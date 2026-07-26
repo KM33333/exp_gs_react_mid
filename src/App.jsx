@@ -6,35 +6,38 @@ import GeneratePage from "./pages/GeneratePage";
 import EditPage from "./pages/EditPage";
 
 function App() {
-  // ① 起動時：localStorage から読み込む（無ければ空配列）
   const [contents, setContents] = useState(() => {
     const saved = localStorage.getItem("contents");
-    //if 文を短縮（saved の中にデータがあったら、JSON.parse(saved) を使ってね。なければ、[]（空）で返してね）
     return saved ? JSON.parse(saved) : [];
   });
 
-  // ② contents が変わるたび：localStorage に保存する
   useEffect(() => {
     localStorage.setItem("contents", JSON.stringify(contents));
   }, [contents]);
 
   function addContent(newItem) {
-    setContents([newItem, ...contents]);
+    setContents((prev) => [newItem, ...prev]);
   }
-
+// 緑が AI で書き換えたもの。赤が旧コード。AI が良い感じに直してくれる。クルードとかだと、「指示ないですけど書き換えても良いですか？」と聞いてくれる。
   function updateContent(id, changes) {
-    setContents(
-      contents.map((c) => (c.id === id ? { ...c, ...changes } : c))
-    );
+    setContents((prev) => prev.map((c) => (c.id === id ? { ...c, ...changes } : c)));
   }
 
+  function deleteContent(id) {
+    // 誤クリックでの消失を防ぐ確認（OKで削除／キャンセルで何もしない）
+    if (!confirm("このコンテンツを削除しますか？")) return;
+    setContents((prev) => prev.filter((c) => c.id !== id));
+  }
   return (
     <div style={{ maxWidth: 640, margin: "0 auto", padding: 24 }}>
-      <h1>美術館・博物館の AI 提案</h1>
+      <h1>AI ショップ管理画面</h1>
       <NavBar />
 
       <Routes>
-        <Route path="/" element={<DashboardPage contents={contents} />} />
+        <Route
+          path="/"
+          element={<DashboardPage contents={contents} onDelete={deleteContent} />}
+        />
         <Route path="/generate" element={<GeneratePage onAdd={addContent} />} />
         <Route
           path="/edit/:id"
