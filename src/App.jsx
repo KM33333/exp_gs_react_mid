@@ -18,15 +18,23 @@ function App() {
   function addContent(newItem) {
     setContents((prev) => [newItem, ...prev]);
   }
-// 緑が AI で書き換えたもの。赤が旧コード。AI が良い感じに直してくれる。クルードとかだと、「指示ないですけど書き換えても良いですか？」と聞いてくれる。
+  // 緑が AI で書き換えたもの。赤が旧コード。AI が良い感じに直してくれる。クルードとかだと、「指示ないですけど書き換えても良いですか？」と聞いてくれる。
   function updateContent(id, changes) {
-    setContents((prev) => prev.map((c) => (c.id === id ? { ...c, ...changes } : c)));
+    setContents((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, ...changes } : c)),
+    );
   }
 
   function deleteContent(id) {
     // 誤クリックでの消失を防ぐ確認（OKで削除／キャンセルで何もしない）
     if (!confirm("このコンテンツを削除しますか？")) return;
     setContents((prev) => prev.filter((c) => c.id !== id));
+  }
+
+  function toggleFavorite(id) {
+    setContents((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, favorite: !c.favorite } : c)),
+    );
   }
   return (
     <div style={{ maxWidth: 640, margin: "0 auto", padding: 24 }}>
@@ -36,7 +44,13 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<DashboardPage contents={contents} onDelete={deleteContent} />}
+          element={
+            <DashboardPage
+              contents={contents}
+              onDelete={deleteContent}
+              onToggleFavorite={toggleFavorite}
+            />
+          }
         />
         <Route path="/generate" element={<GeneratePage onAdd={addContent} />} />
         <Route

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ContentCard from "../components/ContentCard";
 
-function DashboardPage({ contents, onDelete }) {
+function DashboardPage({ contents, onDelete, onToggleFavorite }) {
   const [searchText, setSearchText] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -109,24 +109,44 @@ function DashboardPage({ contents, onDelete }) {
                 status={item.status}
               />
             </Link>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onDelete(item.id);
-              }}
-              style={{
-                padding: "6px 10px",
-                border: "1px solid #ef4444",
-                borderRadius: 6,
-                background: "#fff",
-                color: "#ef4444",
-                cursor: "pointer",
-              }}
-            >
-              削除
-            </button>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onToggleFavorite(item.id);
+                }}
+                style={{
+                  padding: "6px 10px",
+                  border: "1px solid #f59e0b",
+                  borderRadius: 6,
+                  background: item.favorite ? "#fef3c7" : "#fff",
+                  color: item.favorite ? "#92400e" : "#f59e0b",
+                  cursor: "pointer",
+                }}
+              >
+                {item.favorite ? "★ お気に入り" : "☆ お気に入り"}
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onDelete(item.id);
+                }}
+                style={{
+                  padding: "6px 10px",
+                  border: "1px solid #ef4444",
+                  borderRadius: 6,
+                  background: "#fff",
+                  color: "#ef4444",
+                  cursor: "pointer",
+                }}
+              >
+                削除
+              </button>
+            </div>
           </div>
         ))
       )}
